@@ -1,8 +1,11 @@
 
+import { toNodeHandler } from "better-auth/node";
 import { Request, Response } from "express";
 import express from "express";
+import { auth } from "./app/lib/auth";
 
 const app = express();
+app.all('/api/auth/{*any}', toNodeHandler(auth));
 
 app.get('/', (req: Request, res: Response) => {
   res.send('Hello, TypeScript + Express!');

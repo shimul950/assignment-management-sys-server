@@ -1,0 +1,36 @@
+model Assignment {
+  id          String           @id @default(uuid()) 
+  title       String
+  description String?
+  deadline    DateTime
+  maxMarks    Int             
+  status      AssignmentStatus @default(DRAFT)
+
+  teacherId String 
+  classId   String 
+  subjectId String 
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt 
+
+  // Relations
+  teacher     User                   @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  class       Class                  @relation(fields: [classId], references: [id], onDelete: Cascade)
+  subject     Subject                @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  attachments AssignmentAttachment[]
+  submissions Submission[]
+
+  // Common queries
+  @@index([teacherId])
+  @@index([classId])
+  @@index([subjectId])
+  @@index([status])
+  @@index([deadline])
+  // Student assignment listing
+  @@index([classId, status])
+  // Teacher assignment listing
+  @@index([teacherId, status])
+  // Useful for filtering assignments by class + subject
+  @@index([classId, subjectId])
+  @@map("assignments")
+}

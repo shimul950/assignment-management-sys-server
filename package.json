@@ -9,6 +9,7 @@
     "dev": "tsx watch src/server.ts",
     "lint": "eslint ./src/**/*",
     "migrate": "prisma migrate dev",
+    "migrate-reset":"prisma migrate reset",
     "generate": "prisma generate",
     "studio": "prisma studio",
     "push": "prisma db push",
@@ -21,6 +22,7 @@
   "dependencies": {
     "@prisma/adapter-pg": "^7.9.1",
     "@prisma/client": "^7.9.1",
+    "better-auth": "^1.6.26",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "pg": "^8.22.0",

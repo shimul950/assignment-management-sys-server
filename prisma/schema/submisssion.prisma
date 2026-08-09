@@ -1,0 +1,32 @@
+model Submission {
+  id           String @id @default(uuid()) 
+  assignmentId String 
+  studentId    String 
+
+  answer   String?
+  marks    Int?
+  feedback String?
+  status   SubmissionStatus @default(SUBMITTED)
+  isLate   Boolean          @default(false) 
+
+  submittedAt DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt 
+  gradedAt    DateTime? 
+
+  // Relations
+  assignment Assignment       @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
+  student    User             @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  files      SubmissionFile[]
+
+  // A student can submit only once per assignment
+  @@unique([assignmentId, studentId])
+  // Common queries
+  @@index([assignmentId])
+  @@index([studentId])
+  @@index([status])
+  // Teacher viewing submissions for an assignment
+  @@index([assignmentId, status])
+  // Student viewing their submissions
+  @@index([studentId, status])
+  @@map("submissions")
+}

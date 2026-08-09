@@ -1,0 +1,17 @@
+model SubmissionFile {
+  id           String @id @default(uuid()) 
+  submissionId String @map("submission_id") 
+
+  fileName String  
+  fileUrl  String 
+  fileType String? 
+  fileSize Int?    
+
+  createdAt DateTime @default(now()) 
+
+  // Relation
+  submission Submission @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+
+  @@index([submissionId])
+  @@map("submission_files")
+}

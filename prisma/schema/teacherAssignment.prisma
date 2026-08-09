@@ -1,0 +1,26 @@
+model TeacherAssignment {
+  id String @id @default(uuid()) 
+
+  teacherId String @map("teacher_id") 
+  classId   String @map("class_id") 
+  subjectId String @map("subject_id") 
+
+  createdAt DateTime @default(now()) 
+  updatedAt DateTime @updatedAt 
+
+  // Relations
+  teacher User    @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  class   Class   @relation(fields: [classId], references: [id], onDelete: Cascade)
+  subject Subject @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+
+  // Prevent duplicate teacher-class-subject assignments
+  @@unique([teacherId, classId, subjectId])
+  @@index([teacherId])
+  @@index([classId])
+  @@index([subjectId])
+  // Useful when querying teacher + class
+  @@index([teacherId, classId])
+  // Useful when querying class + subject
+  @@index([classId, subjectId])
+  @@map("teacher_assignments")
+}
