@@ -1,15 +1,15 @@
 model StudentEnrollment {
-  id String @id @default(uuid()) 
+  id String @id @default(uuid())
 
-  studentId String @map("student_id") 
-  classId   String @map("class_id") 
+  studentId String @map("student_id")
+  classId   String @map("class_id")
 
-  createdAt DateTime @default(now()) 
-  updatedAt DateTime @updatedAt 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   // Relations
-  student User  @relation(fields: [studentId], references: [id], onDelete: Cascade)
-  class   Class @relation(fields: [classId], references: [id], onDelete: Cascade)
+  student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  class   Class   @relation(fields: [classId], references: [id], onDelete: Cascade)
 
   // A student cannot be enrolled in the same class twice
   @@unique([studentId, classId])

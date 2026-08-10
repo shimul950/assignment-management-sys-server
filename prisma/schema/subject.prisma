@@ -1,13 +1,12 @@
 model Subject {
-  id        String   @id @default(uuid()) 
+  id        String   @id @default(uuid())
   name      String
   code      String   @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   // Relations
-  teacherAssignments TeacherAssignment[]
-  assignments        Assignment[]
+  assignments Assignment[]
 
   @@index([name])
   @@map("subjects")

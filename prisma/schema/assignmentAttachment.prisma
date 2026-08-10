@@ -1,14 +1,14 @@
 model AssignmentAttachment {
-  id           String @id @default(uuid()) 
-  assignmentId String 
+  id           String @id @default(uuid())
+  assignmentId String
 
-  fileName String  
-  fileUrl  String 
-  fileType String? 
-  fileSize Int?    
+  fileName String
+  fileUrl  String
+  fileType String?
+  fileSize Int?
 
-  createdAt DateTime @default(now()) 
-  updatedAt DateTime @updatedAt 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   // Relation
   assignment Assignment @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
