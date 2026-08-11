@@ -20,7 +20,7 @@ app.set("views", path.resolve(process.cwd(), `src/app/templates`))
 
 
 app.use(cors({
-    origin:[envVars.FRONTEND_URL, envVars.BETTER_AUTH_URL, "http://localhost:3000","http://localhost:5000"],
+    origin:[envVars.FRONTEND_URL, envVars.BETTER_AUTH_URL, "http://localhost:3000","http://localhost:8000"],
     credentials: true,
     methods:["GET","POST","DELETE","PUT","PATCH"],
     allowedHeaders:["Content-Type", "Authorization"]
