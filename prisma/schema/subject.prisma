@@ -7,6 +7,7 @@ model Subject {
 
   // Relations
   assignments Assignment[]
+  teacherAssignments TeacherAssignment[]
 
   @@index([name])
   @@map("subjects")

@@ -17,6 +17,7 @@ model Teacher {
   updatedAt     DateTime @updatedAt
 
   assignments Assignment[]
+  teacherAssignments TeacherAssignment[]
 
   //relations
   userId String @unique

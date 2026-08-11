@@ -8,6 +8,7 @@ model Class {
   // Relations
   studentEnrollments StudentEnrollment[]
   assignments        Assignment[]
+  teacherAssignments TeacherAssignment[]
 
   @@index([name])
   @@map("classes")

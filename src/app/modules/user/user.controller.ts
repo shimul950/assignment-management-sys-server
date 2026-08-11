@@ -27,7 +27,23 @@ const createSuperAdmin = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const createTeacher = catchAsync(
+    async(req: Request, res:Response) =>{
+        const payload = req.body;
+
+        const result = await userService.createTeacher(payload)
+
+        sendResponce(res, {
+            httpStatusCode:status.CREATED,
+            success: true,
+            message:"Teacher registered successfully",
+            data: result
+        })
+    }
+) 
+
 export const userController = {
     createAdmin,
-    createSuperAdmin
+    createSuperAdmin,
+    createTeacher
 }

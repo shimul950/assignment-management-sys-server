@@ -1,7 +1,7 @@
 import { Role } from "../../../generated/prisma/enums";
 import { auth } from "../../lib/auth";
 import { prisma } from "../../lib/prisma";
-import { ICreateAdmin, ICreateSuperAdmin } from "./user.interface";
+import { CreateTeacherPayload, ICreateAdmin, ICreateSuperAdmin } from "./user.interface";
 
 
 
@@ -155,8 +155,93 @@ const createSuperAdmin = async (payload: ICreateSuperAdmin) => {
     }
 };
 
+const createTeacher = async (payload: CreateTeacherPayload) => {
+
+    const userExists = await prisma.user.findUnique({
+        where: {
+            email: payload.teacher.email
+        }
+    })
+
+    if (userExists) {
+        throw new Error(`User with email ${payload.teacher.email} already exists`);
+    }
+
+    const userData = await auth.api.signUpEmail({
+        body: {
+            email: payload.teacher.email,
+            password: payload.password,
+            role: Role.TEACHER,
+            name: payload.teacher.name,
+            needPasswordChange: true
+        }
+    })
+
+    try {
+        const result = await prisma.$transaction(async (tx) => {
+            const teacherData = await tx.teacher.create({
+                data: {
+                    userId: userData.user.id,
+                    // Ensure required fields (like designation) are provided to satisfy Prisma types
+                    ...payload.teacher,
+                    designation: payload.teacher.designation ?? "",
+                }
+            })
+
+            const teacher = await tx.teacher.findUnique({
+                where: {
+                    id: teacherData.id
+                },
+                select: {
+                    id: true,
+                    userId: true,
+                    name: true,
+                    email: true,
+                    profilePhoto: true,
+                    contactNumber: true,
+                    address: true,
+                    experience: true,
+                    gender: true,
+                    qualification: true,
+                    createdAt: true,
+                    updatedAt: true,
+                    user: {
+                        select: {
+                            id: true,
+                            email: true,
+                            name: true,
+                            role: true,
+                            status: true,
+                            emailVerified: true,
+                            image: true,
+                            isDeleted: true,
+                            deletedAt: true,
+                            createdAt: true,
+                            updatedAt: true
+                        }
+                    },
+                }
+
+
+            })
+
+            return teacher;
+        })
+        return result;
+
+    } catch {
+        await prisma.user.delete({
+            where: {
+                id: userData.user.id
+            }
+        })
+        throw new Error("Failed to create teacher");
+    }
+}
+
 
 export const userService ={
     createAdmin,
-    createSuperAdmin
+    createSuperAdmin,
+    createTeacher
 }
